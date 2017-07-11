@@ -53,7 +53,9 @@ class DateBuddhistBehavior extends AttributeBehavior
             }
             $year = intval($exp[2]);
             
-            return strval($year - $this->yearDistance).'-'.$exp[1].'-'.$exp[0];
+            echo strval($year - $this->yearDistance).'-'.$exp[1].'-'.$exp[0];
+            exit();
+            //return strval($year - $this->yearDistance).'-'.$exp[1].'-'.$exp[0];
         }
         return parent::getValue($event);
     }
