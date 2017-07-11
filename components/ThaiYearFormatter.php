@@ -58,16 +58,8 @@ class ThaiYearFormatter extends Formatter{
         if ($format === null) {
             $format = $this->dateFormat;
         }
-        //return $value;
-        //return $this->replaceYear($this->formatDateTimeValue($value, $format, 'date'));
-        
-        
         $gdate = $this->formatDateTimeValue($value, $format, 'date');
         return $this->toThaiYear($gdate,$value);
-        // $e = explode(' ',$gdate);
-        // $e[2] += 543;
-        //return implode(" ",$e);
-        //return str_replace($year,intval($year)+543,$gdate);
     }
 
     public function asDatetime($value, $format = null)
@@ -75,7 +67,6 @@ class ThaiYearFormatter extends Formatter{
         if ($format === null) {
             $format = $this->datetimeFormat;
         }
-        //return $this->replaceYear($this->formatDateTimeValue($value, $format, 'datetime'));
         $gdate = $this->formatDateTimeValue($value, $format, 'datetime');
         return  $this->toThaiYear($gdate,$value);
     }
@@ -148,65 +139,6 @@ class ThaiYearFormatter extends Formatter{
         }
     }
 
-    // private function formatDateTimeValue($value, $format, $type)
-    // {
-    //     $timeZone = $this->timeZone;
-    //     // avoid time zone conversion for date-only values
-    //     if ($type === 'date') {
-    //         list($timestamp, $hasTimeInfo) = $this->normalizeDatetimeValue($value, true);
-    //         if (!$hasTimeInfo) {
-    //             $timeZone = $this->defaultTimeZone;
-    //         }
-    //     } else {
-
-    //         $timestamp = $this->normalizeDatetimeValue($value);
-    //     }
-    //     if ($timestamp === null) {
-    //         return $this->nullDisplay;
-    //     }
-    //     // intl does not work with dates >=2038 or <=1901 on 32bit machines, fall back to PHP
-    //     $year = $timestamp->format('Y');
-    //     if ($this->_intlLoaded && !(PHP_INT_SIZE == 4 && ($year <= 1901 || $year >= 2038))) {
-    //         if (strncmp($format, 'php:', 4) === 0) {
-    //             $format = FormatConverter::convertDatePhpToIcu(substr($format, 4));
-    //         }
-    //         if (isset($this->_dateFormats[$format])) {
-    //             if ($type === 'date') {
-    //                 $formatter = new IntlDateFormatter($this->locale, $this->_dateFormats[$format], IntlDateFormatter::NONE, $timeZone);
-    //             } elseif ($type === 'time') {
-    //                 $formatter = new IntlDateFormatter($this->locale, IntlDateFormatter::NONE, $this->_dateFormats[$format], $timeZone);
-    //             } else {
-    //                 $formatter = new IntlDateFormatter($this->locale, $this->_dateFormats[$format], $this->_dateFormats[$format], $timeZone);
-    //             }
-    //         } else {
-    //             $formatter = new IntlDateFormatter($this->locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE, $timeZone, null, $format);
-    //         }
-    //         if ($formatter === null) {
-    //             throw new InvalidConfigException(intl_get_error_message());
-    //         }
-    //         // make IntlDateFormatter work with DateTimeImmutable
-    //         if ($timestamp instanceof \DateTimeImmutable) {
-    //             $timestamp = new DateTime($timestamp->format(DateTime::ISO8601), $timestamp->getTimezone());
-    //         }
-    //         return $formatter->format($timestamp);
-    //     } else {
-    //         if (strncmp($format, 'php:', 4) === 0) {
-    //             $format = substr($format, 4);
-    //         } else {
-    //             $format = FormatConverter::convertDateIcuToPhp($format, $type, $this->locale);
-    //         }
-    //         if ($timeZone != null) {
-    //             if ($timestamp instanceof \DateTimeImmutable) {
-    //                 $timestamp = $timestamp->setTimezone(new DateTimeZone($timeZone));
-    //             } else {
-    //                 $timestamp->setTimezone(new DateTimeZone($timeZone));
-    //             }
-    //         }
-    //         return $timestamp->format($format);
-    //     }
-    // }
-
-
     protected function normalizeDatetimeValue($value, $checkTimeInfo = false)
     {
         // checking for DateTime and DateTimeInterface is not redundant, DateTimeInterface is only in PHP>5.5
@@ -222,15 +154,11 @@ class ThaiYearFormatter extends Formatter{
                 $timestamp = new DateTime();
                 $timestamp->setTimezone(new DateTimeZone('UTC'));
                 $timestamp->setTimestamp($value);
-                //$timestamp = $this->setThaiYear($timestamp);
                 return $checkTimeInfo ? [$timestamp, true] : $timestamp;
 
             } elseif (($timestamp = DateTime::createFromFormat('Y-m-d', $value, new DateTimeZone($this->defaultTimeZone))) !== false) { // try Y-m-d format (support invalid dates like 2012-13-01)
-                //$timestamp = $this->setThaiYear($timestamp);
                 return $checkTimeInfo ? [$timestamp, false] : $timestamp;
             } elseif (($timestamp = DateTime::createFromFormat('Y-m-d H:i:s', $value, new DateTimeZone($this->defaultTimeZone))) !== false) { // try Y-m-d H:i:s format (support invalid dates like 2012-13-01 12:63:12)
-
-                //$timestamp = $this->setThaiYear($timestamp);
                 return $checkTimeInfo ? [$timestamp, true] : $timestamp;
             }
             // finally try to create a DateTime object with the value
@@ -246,17 +174,7 @@ class ThaiYearFormatter extends Formatter{
                 . "\n" . print_r(DateTime::getLastErrors(), true), $e->getCode(), $e);
         }
     }
-    /**
-     * [setThaiYear description]
-     * @param DateTime $timestamp [description]
-     */
-    public function setThaiYear(DateTime $timestamp){
-        if($this->checkThaiLocale()){
-            return $timestamp->setDate(($timestamp->format('Y')+543),$timestamp->format('m'),$timestamp->format('d'));
-        }else{
-            return $timestamp;
-        }
-    }
+    
     /**
      * replace Year
      * @param  string $strDate
