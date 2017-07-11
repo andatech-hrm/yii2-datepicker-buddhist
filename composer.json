@@ -1,21 +1,28 @@
 {
-    "name": "kuakling/yii2-datepicker-buddhist",
+    "name": "andatech-hrm/yii2-datepicker-buddhist",
     "description": "Yii2 Datepicker Buddhist",
     "type": "yii2-extension",
     "keywords": ["yii2","extension"],
     "license": "MIT",
+    "support": {
+        "source": "https://github.com/andatech-hrm/yii2-datepicker-buddhist.git",
+        "issues": "https://github.com/andatech-hrm/yyii2-datepicker-buddhist/issues"
+    },
     "authors": [
         {
-            "name": "Surakit",
-            "email": "kuakling@gmail.com"
+            "name": "Surakit Choodet",
+            "email": "kuakling@gmail.com",
+            "role" : "Developer"
+        },
+        {
+            "name": "Ahamad Jedhu",
+            "email": "ahamad.jedu@gmail.com",
+            "role" : "Developer"
         }
     ],
-    "require": {
-        "yiisoft/yii2": "*"
-    },
     "autoload": {
         "psr-4": {
-            "kuakling\\datepicker\\": ""
+            "andahrm\\datepicker\\": ""
         }
     }
 }
