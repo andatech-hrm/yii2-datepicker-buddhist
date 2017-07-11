@@ -1,10 +1,10 @@
 <?php
-namespace kuakling\datepicker;
+namespace andahrm\datepicker;
 
 use Yii;
 use yii\bootstrap\Html;
 /**
- * \kuakling\datepicker\YearBuddhist.
+ * \andahrm\datepicker\YearBuddhist.
  *
  * @author kuakling <kuakling@gmail.com>
  * @since 1.0

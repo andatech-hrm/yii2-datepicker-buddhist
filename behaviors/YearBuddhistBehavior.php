@@ -1,5 +1,5 @@
 <?php
-namespace kuakling\datepicker\behaviors;
+namespace andahrm\datepicker\behaviors;
 
 use yii\db\BaseActiveRecord;
 use yii\behaviors\AttributeBehavior;

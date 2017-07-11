@@ -8,7 +8,7 @@
    * @subpackage thaiYearFormatter
    * @author     Satit Seethaphon <dixonsatit@gmail.com>
    */
-namespace kuakling\datepicker\components;
+namespace andahrm\datepicker\components;
 
 use yii\i18n\Formatter;
 use IntlDateFormatter;
@@ -16,6 +16,7 @@ use DateTime;
 use DateTimeZone;
 use yii\helpers\FormatConverter;
 use Yii;
+use yii\base\InvalidParamException;
 
 class ThaiYearFormatter extends Formatter{
 

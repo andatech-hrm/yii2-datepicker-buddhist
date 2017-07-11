@@ -4,7 +4,7 @@
  * @package yii2-datepicker-buddhist
  * @version 0.1
  */
-namespace kuakling\datepicker;
+namespace andahrm\datepicker;
 
 use yii\web\AssetBundle;
 /**

@@ -6,7 +6,7 @@ composer require kuakling/yii2-datepicker-buddhist "dev-master"
 ## Usage
 ~~~ php
 use yii\bootstrap\ActiveForm;
-use kuakling\datepicker\DatePicker;
+use andahrm\datepicker\DatePicker;
 
 $form = ActiveForm::begin();
 
