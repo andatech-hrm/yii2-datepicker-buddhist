@@ -59,7 +59,7 @@ class ThaiYearFormatter extends Formatter{
             $format = $this->dateFormat;
         }
         $gdate = $this->formatDateTimeValue($value, $format, 'date');
-        return $this->toThaiYear($gdate,$value);
+        return $value?$this->toThaiYear($gdate,$value):Yii::$app->formatter->nullDisplay;
     }
 
     public function asDatetime($value, $format = null)
@@ -68,7 +68,7 @@ class ThaiYearFormatter extends Formatter{
             $format = $this->datetimeFormat;
         }
         $gdate = $this->formatDateTimeValue($value, $format, 'datetime');
-        return  $this->toThaiYear($gdate,$value);
+        return  $value?$this->toThaiYear($gdate,$value):null;
     }
     
     protected function toThaiYear($gdate,$value){
