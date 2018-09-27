@@ -1,13 +1,15 @@
 <?php
- /**
-   * ThaiYearFormatter
-   *
-   * Convert Year to Thai Buddhist Era Year
-   *
-   * @package    dixonsatit
-   * @subpackage thaiYearFormatter
-   * @author     Satit Seethaphon <dixonsatit@gmail.com>
-   */
+
+/**
+ * ThaiYearFormatter
+ *
+ * Convert Year to Thai Buddhist Era Year
+ *
+ * @package    dixonsatit
+ * @subpackage thaiYearFormatter
+ * @author     Satit Seethaphon <dixonsatit@gmail.com>
+ */
+
 namespace andahrm\datepicker\components;
 
 use yii\i18n\Formatter;
@@ -18,18 +20,17 @@ use yii\helpers\FormatConverter;
 use Yii;
 use yii\base\InvalidParamException;
 
-class ThaiYearFormatter extends Formatter{
+class ThaiYearFormatter extends Formatter {
 
     private $_intlLoaded = false;
-       private $_dateFormats = [
-        'short'  => 3, // IntlDateFormatter::SHORT,
+    private $_dateFormats = [
+        'short' => 3, // IntlDateFormatter::SHORT,
         'medium' => 2, // IntlDateFormatter::MEDIUM,
-        'long'   => 1, // IntlDateFormatter::LONG,
-        'full'   => 0, // IntlDateFormatter::FULL,
+        'long' => 1, // IntlDateFormatter::LONG,
+        'full' => 0, // IntlDateFormatter::FULL,
     ];
 
-    public function init()
-    {
+    public function init() {
         if ($this->timeZone === null) {
             $this->timeZone = Yii::$app->timeZone;
         }
@@ -53,40 +54,37 @@ class ThaiYearFormatter extends Formatter{
         }
     }
 
-
-    public function asDate($value, $format = null){
+    public function asDate($value, $format = null) {
         if ($format === null) {
             $format = $this->dateFormat;
         }
         $gdate = $this->formatDateTimeValue($value, $format, 'date');
-        return $value?$this->toThaiYear($gdate,$value):Yii::$app->formatter->nullDisplay;
+        return $value ? $this->toThaiYear($gdate, $value) : Yii::$app->formatter->nullDisplay;
     }
 
-    public function asDatetime($value, $format = null)
-    {
+    public function asDatetime($value, $format = null) {
         if ($format === null) {
             $format = $this->datetimeFormat;
         }
         $gdate = $this->formatDateTimeValue($value, $format, 'datetime');
-        return  $value?$this->toThaiYear($gdate,$value):null;
+        return $value ? $this->toThaiYear($gdate, $value) : null;
     }
-    
-    protected function toThaiYear($gdate,$value){
-        if($this->checkThaiLocale()){
-            $year = parent::asDate($value,"php:Y");
-            return str_replace($year,intval($year)+543,$gdate);
-        }else{
+
+    protected function toThaiYear($gdate, $value) {
+        if ($this->checkThaiLocale()) {
+            $year = parent::asDate($value, "php:Y");
+            return str_replace($year, intval($year) + 543, $gdate);
+        } else {
             return $gdate;
         }
     }
-    
-    private function formatDateTimeValue($value, $format, $type)
-    {
+
+    private function formatDateTimeValue($value, $format, $type) {
         $timeZone = $this->timeZone;
         // avoid time zone conversion for date-only values
         if ($type === 'date') {
             list($timestamp, $hasTimeInfo) = $this->normalizeDatetimeValue($value, true);
-            
+
             if (!$hasTimeInfo) {
                 $timeZone = $this->defaultTimeZone;
             }
@@ -139,8 +137,7 @@ class ThaiYearFormatter extends Formatter{
         }
     }
 
-    protected function normalizeDatetimeValue($value, $checkTimeInfo = false)
-    {
+    protected function normalizeDatetimeValue($value, $checkTimeInfo = false) {
         // checking for DateTime and DateTimeInterface is not redundant, DateTimeInterface is only in PHP>5.5
         if ($value === null || $value instanceof DateTime || $value instanceof DateTimeInterface) {
             // skip any processing
@@ -155,7 +152,6 @@ class ThaiYearFormatter extends Formatter{
                 $timestamp->setTimezone(new DateTimeZone('UTC'));
                 $timestamp->setTimestamp($value);
                 return $checkTimeInfo ? [$timestamp, true] : $timestamp;
-
             } elseif (($timestamp = DateTime::createFromFormat('Y-m-d', $value, new DateTimeZone($this->defaultTimeZone))) !== false) { // try Y-m-d format (support invalid dates like 2012-13-01)
                 return $checkTimeInfo ? [$timestamp, false] : $timestamp;
             } elseif (($timestamp = DateTime::createFromFormat('Y-m-d H:i:s', $value, new DateTimeZone($this->defaultTimeZone))) !== false) { // try Y-m-d H:i:s format (support invalid dates like 2012-13-01 12:63:12)
@@ -171,25 +167,42 @@ class ThaiYearFormatter extends Formatter{
             }
         } catch (\Exception $e) {
             throw new InvalidParamException("'$value' is not a valid date time value: " . $e->getMessage()
-                . "\n" . print_r(DateTime::getLastErrors(), true), $e->getCode(), $e);
+            . "\n" . print_r(DateTime::getLastErrors(), true), $e->getCode(), $e);
         }
     }
-    
+
     /**
      * replace Year
      * @param  string $strDate
      * @return string date
      */
-    public function replaceYear($strDate)
-    {
-      return str_replace('ค.ศ.','พ.ศ.',$strDate);
+    public function replaceYear($strDate) {
+        return str_replace('ค.ศ.', 'พ.ศ.', $strDate);
     }
+
     /**
      * check is Thai Locale
      * @return string date
      */
-    public function checkThaiLocale()
-    {
-      return (strtolower($this->locale) === 'th' || $this->locale == 'th_TH' || $this->locale == 'th-TH');
+    public function checkThaiLocale() {
+        return (strtolower($this->locale) === 'th' || $this->locale == 'th_TH' || $this->locale == 'th-TH');
     }
+
+    public static function toDb($value) {
+        // echo $this->owner->scenario;
+
+        if (!$value) {
+            return null;
+        }
+        $exp = explode('/', $value);
+        if (count($exp) !== 3) {
+            return null;
+        }
+        $year = intval($exp[2]);
+
+        // echo strval($year - $this->yearDistance).'-'.$exp[1].'-'.$exp[0];
+        // exit();
+        return strval($year - 543) . '-' . $exp[1] . '-' . $exp[0];
+    }
+
 }
