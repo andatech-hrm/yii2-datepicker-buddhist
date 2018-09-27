@@ -38,23 +38,44 @@ class DateBuddhistBehavior extends AttributeBehavior {
      */
     protected function getValue($event) {
         // echo $this->owner->scenario;
-        if ($this->value === null) {
-            $attribute = $this->dateAttribute;
-            $value = $this->owner->{$attribute};
-            if (!$value) {
-                return null;
-            }
-            $exp = explode('/', $value);
+
+        if (in_array($event->name, [BaseActiveRecord::EVENT_BEFORE_INSERT, BaseActiveRecord::EVENT_BEFORE_UPDATE])) {
+            return $this->getConvertValue();
+        } elseif (in_array($event->name, [BaseActiveRecord::EVENT_AFTER_FIND, BaseActiveRecord::EVENT_AFTER_INSERT, BaseActiveRecord::EVENT_AFTER_UPDATE])) {
+            return $this->getUnConvertValue();
+        }
+    }
+
+    private function getConvertValue() {
+        $attribute = $this->dateAttribute;
+        $value = $this->owner->{$attribute};
+        return $this->checkFormatDate($value);
+    }
+
+    private function getUnConvertValue() {
+        return $this->value;
+    }
+
+    private function checkFormatDate($date) {
+//        echo $date;
+//        exit();
+        #2012-09-12
+        if (\DateTime::createFromFormat("Y-m-d", $date)) {
+//            echo "1:";
+//            echo $date;
+//            exit();
+            return $date;
+        } else if (\DateTime::createFromFormat("d/m/Y", $date)) {
+//            echo "2:";
+//            echo $date;
+//            exit();
+            $exp = explode('/', $date);
             if (count($exp) !== 3) {
-                return null;
+                
             }
             $year = intval($exp[2]);
-
-            // echo strval($year - $this->yearDistance).'-'.$exp[1].'-'.$exp[0];
-            // exit();
             return strval($year - $this->yearDistance) . '-' . $exp[1] . '-' . $exp[0];
         }
-        return parent::getValue($event);
     }
 
 }
