@@ -23,7 +23,6 @@ class DateBuddhistBehavior extends AttributeBehavior {
      */
     public function init() {
         parent::init();
-
         $this->attributes = [
             BaseActiveRecord::EVENT_BEFORE_INSERT => $this->dateAttribute,
             BaseActiveRecord::EVENT_BEFORE_UPDATE => $this->dateAttribute,

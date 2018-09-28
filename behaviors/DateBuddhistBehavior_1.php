@@ -46,6 +46,9 @@ class DateBuddhistBehavior extends AttributeBehavior {
     protected function getValue($event) {
         // echo $this->owner->scenario;
 
+        
+        
+        
         if (in_array($event->name, [BaseActiveRecord::EVENT_BEFORE_INSERT, BaseActiveRecord::EVENT_BEFORE_UPDATE])) {
             $attribute = $this->dateAttribute;
             $date = $this->owner->{$attribute};
